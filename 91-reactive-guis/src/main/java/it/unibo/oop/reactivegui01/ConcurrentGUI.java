@@ -73,6 +73,13 @@ public final class ConcurrentGUI extends JFrame {
                 try {
                     // The EDT doesn't access `counter` anymore, it doesn't need to be volatile 
                     final var nextText = Integer.toString(this.counter);
+                    /*
+                     * invokeAndWait() places the Runnable you pass to it into the EDT event queue and 
+                     * waits until the EDT has executed it. This should be used when a non-GUI thread needs to 
+                     * do something that affects the GUI, but also needs to wait until it is actually done 
+                     * before it can continue. If you just want to do something that affects the GUI but do not 
+                     * care when it is finished, you should instead use invokeLater().
+                     */
                     SwingUtilities.invokeAndWait(() -> ConcurrentGUI.this.display.setText(nextText));
                     this.counter++;
                     Thread.sleep(100);
