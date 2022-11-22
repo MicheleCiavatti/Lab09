@@ -18,7 +18,7 @@ import javax.swing.SwingUtilities;
  */
 public final class AnotherConcurrentGUI extends JFrame {
 
-    private static final int SECONDS = 10;
+    private static final int SECONDS = 3;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
     private final JLabel currentNumber = new JLabel();
@@ -58,6 +58,7 @@ public final class AnotherConcurrentGUI extends JFrame {
                         e.printStackTrace();
                     }
                 }
+                this.btStop.doClick();
         }).start();
     }
 
