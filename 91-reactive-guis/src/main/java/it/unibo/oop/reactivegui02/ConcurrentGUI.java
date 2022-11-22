@@ -39,7 +39,11 @@ public final class ConcurrentGUI extends JFrame {
         final var agent = new Agent();
         this.btUp.addActionListener(event -> agent.increaseCounting());
         this.btDown.addActionListener(event -> agent.decreaseCounting());
-        this.btStop.addActionListener(event -> agent.stopCounting());
+        this.btStop.addActionListener(event -> {
+            agent.stopCounting();
+            this.btDown.setEnabled(false);
+            this.btUp.setEnabled(false);
+        });
 
         new Thread(agent).start();
     }
@@ -64,10 +68,9 @@ public final class ConcurrentGUI extends JFrame {
                 }
             } 
         }
+
         public void stopCounting() {
             this.stop = true;
-            ConcurrentGUI.this.btDown.setEnabled(false);
-            ConcurrentGUI.this.btUp.setEnabled(false);
         }
 
         public void decreaseCounting() {
