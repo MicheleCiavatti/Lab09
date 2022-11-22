@@ -38,14 +38,31 @@ public final class MultiThreadedSumMatrix implements SumMatrix {
     }
     @Override
     public double sum(double[][] matrix) {
-        final List<Double> mat = new ArrayList<Double>(matrix.length);
-        for (var row: matrix) {
+        //The matrix is converted in a list
+        final List<Double> list = new ArrayList<Double>(matrix.length);
+        for (var row: matrix) { 
             for (var number: row) {
-                mat.add(number);
+                list.add(number);
             }
         }
-
-        return 0;
+        final int size = list.size() % this.nThreads + list.size() / this.nThreads;
+        final List<Worker> workers = new ArrayList<>(this.nThreads);
+        for (int i = 0; i < list.size(); i += size) {
+            workers.add(new Worker(list, i, size));
+        }
+        for (final var worker: workers) {
+            worker.start();
+        }
+        double sum = 0.0;
+        for (final var worker: workers) {
+            try {
+                worker.join();
+                sum += worker.getResult();
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        return sum;
     }
     
 }
